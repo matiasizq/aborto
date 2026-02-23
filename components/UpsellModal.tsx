@@ -59,6 +59,33 @@ export const UpsellModal: React.FC<UpsellModalProps> = ({ isOpen, onClose, selec
       window.ShopifyBuy.UI.onReady(client).then((ui: any) => {
         if (cancelled) return;
 
+        // Common styles for cart and line items
+        const commonOptions = {
+          "cart": {
+            "styles": {
+              "cart": { "background-color": "#000000" },
+              "header": { "background-color": "#000000", "color": "#ffffff" },
+              "footer": { "background-color": "#000000", "color": "#ffffff", "border-top": "1px solid rgba(255,255,255,0.1)" },
+              "button": { "background-color": "#22c55e", "color": "#ffffff", ":hover": { "background-color": "#16a34a" } },
+              "discountText": { "color": "#22c55e", "font-weight": "900", "text-shadow": "0 0 10px rgba(34, 197, 94, 0.7)" },
+              "discountAmount": { "color": "#22c55e", "font-weight": "900", "text-shadow": "0 0 10px rgba(34, 197, 94, 0.7)" },
+              "discountIcon": { "fill": "#22c55e" },
+              "subtotal": { "color": "#ffffff", "font-weight": "900" }
+            }
+          },
+          "lineItem": {
+            "styles": {
+              "title": { "color": "#ffffff" },
+              "price": { "color": "#22c55e", "font-weight": "900" },
+              "discount": { "color": "#22c55e", "font-weight": "900", "text-shadow": "0 0 8px rgba(34, 197, 94, 0.5)" },
+              "quantity": { "color": "#ffffff", "font-weight": "900" },
+              "quantityIncrement": { "color": "#ffffff", "border-color": "#ffffff" },
+              "quantityDecrement": { "color": "#ffffff", "border-color": "#ffffff" },
+              "quantityInput": { "color": "#ffffff", "background": "transparent !important", "border-color": "#ffffff" }
+            }
+          }
+        };
+
         // Initialize selected product button (top)
         if (selectedProduct) {
           const selectedNode = document.getElementById('upsell-selected-product');
@@ -100,7 +127,8 @@ export const UpsellModal: React.FC<UpsellModalProps> = ({ isOpen, onClose, selec
                   },
                   "contents": { "img": false, "title": false, "price": false },
                   "text": { "button": lang === 'es' ? "AGREGAR" : "ADD" }
-                }
+                },
+                ...commonOptions
               }
             });
             selectedNode.setAttribute('data-shopify-initialized', 'true');
@@ -149,26 +177,7 @@ export const UpsellModal: React.FC<UpsellModalProps> = ({ isOpen, onClose, selec
                   "contents": { "img": false, "title": false, "price": false },
                   "text": { "button": lang === 'es' ? "AGREGAR -40%" : "ADD -40%" }
                 },
-                "cart": {
-                  "contents": { "title": false },
-                  "styles": {
-                    "cart": { "background-color": "#000000" },
-                    "discountText": { "color": "#22c55e", "font-weight": "900", "text-shadow": "0 0 10px rgba(34, 197, 94, 0.7)" },
-                    "discountAmount": { "color": "#22c55e", "font-weight": "900", "text-shadow": "0 0 10px rgba(34, 197, 94, 0.7)" },
-                    "discountIcon": { "fill": "#22c55e" },
-                    "subtotal": { "color": "#ffffff", "font-weight": "900" }
-                  }
-                },
-                "lineItem": {
-                  "styles": {
-                    "title": { "color": "#ffffff" },
-                    "price": { "color": "#22c55e", "font-weight": "900" },
-                    "discount": { "color": "#22c55e", "font-weight": "900", "text-shadow": "0 0 8px rgba(34, 197, 94, 0.5)" },
-                    "quantity": { "color": "#ffffff", "font-weight": "900" },
-                    "quantityIncrement": { "color": "#ffffff", "border-color": "#ffffff" },
-                    "quantityDecrement": { "color": "#ffffff", "border-color": "#ffffff" }
-                  }
-                }
+                ...commonOptions
               }
             });
             node.setAttribute('data-shopify-initialized', 'true');
@@ -192,7 +201,6 @@ export const UpsellModal: React.FC<UpsellModalProps> = ({ isOpen, onClose, selec
       script.onload = initShopify;
     };
 
-    // Initialize Shopify UI immediately without delay to make the button appear "instantly"
     loadScript();
 
     return () => {

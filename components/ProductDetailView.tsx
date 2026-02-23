@@ -42,7 +42,7 @@ export const ProductDetailView: React.FC = () => {
         const checkout = addResult?.data?.checkoutLineItemsAdd?.checkout;
         if (checkout) checkoutUrlRef.current = checkout.webUrl;
       }
-    } catch (err) {}
+    } catch (err) { }
   };
 
   const handleAddToCart = () => {
@@ -51,10 +51,10 @@ export const ProductDetailView: React.FC = () => {
       (window as any).fbq('track', 'AddToCart', { content_name: selectedProduct.name, value: parseFloat(selectedProduct.newPrice), currency: 'USD' });
     }
     window.dispatchEvent(new CustomEvent('openUpsellModal', { detail: { productId: selectedProduct.shopifyId } }));
-    addToCartViaAPI(selectedProduct.shopifyId).catch(() => {});
+    addToCartViaAPI(selectedProduct.shopifyId).catch(() => { });
   };
 
-  if (!selectedProduct) { setActiveTab('store'); return null; }
+  if (!selectedProduct) return null;
   return (
     <div className="bg-black min-h-screen pb-32 pt-10 sm:pt-20">
       <div className="container mx-auto px-4 max-w-6xl">

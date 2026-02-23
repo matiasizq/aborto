@@ -317,7 +317,7 @@ export const BundleShowcase: React.FC<BundleShowcaseProps> = ({ variant }) => {
                   <div className="flex flex-col items-center lg:items-start gap-2 w-full">
                     <div className="flex items-baseline gap-2">
                       <span className="text-emerald-500 text-6xl sm:text-5xl xl:text-7xl font-black tracking-tighter leading-none drop-shadow-[0_0_10px_rgba(16,185,129,0.5)]">${productData.newPrice}</span>
-                      <span className={`line-through text-[10px] font-black ${variant === 'elite' ? 'text-red-600 drop-shadow-[0_0_8px_rgba(220,38,38,0.8)]' : 'text-gray-500 opacity-50'}`}>
+                      <span className={`font-black ${variant === 'elite' ? 'text-gray-500 line-through decoration-gray-500/50 decoration-2 text-[16px]' : 'line-through text-[10px] text-gray-500 opacity-50'}`}>
                         ${productData.oldPrice}
                       </span>
                     </div>
@@ -345,8 +345,19 @@ export const BundleShowcase: React.FC<BundleShowcaseProps> = ({ variant }) => {
                         <div className="flex items-center gap-2">
                           <Zap className="w-2.5 h-2.5 text-purple-500" />
                           <span className="text-[7.5px] sm:text-[9px] font-black uppercase tracking-[0.2em] text-purple-400">
-                            ACTUALIZACIONES DE POR VIDA
+                            {t('bundle.guarantee_update')}
                           </span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <ShieldCheck className="w-2.5 h-2.5 text-emerald-500" />
+                          <div className="flex flex-col">
+                            <span className="text-[7.5px] sm:text-[9px] font-black uppercase tracking-[0.2em] text-emerald-500">
+                              {t('bundle.guarantee_days')}
+                            </span>
+                            <span className="text-[6px] sm:text-[7px] font-medium uppercase tracking-[0.1em] text-white/40">
+                              {t('bundle.guarantee_refund')}
+                            </span>
+                          </div>
                         </div>
                       </div>
                     )}

@@ -27,7 +27,7 @@ export const UltraWorkflow: React.FC = () => {
   const { lang, t } = useContext(LanguageContext);
   const shopifyProductId = '8473627754671';
   const shopifyNodeId = 'workflow-buy-button-container';
-  const mainVideoUrl = "https://res.cloudinary.com/dbu9kzomq/video/upload/v1769186159/VIDEO_PRINCIAL_AL_LADO_DEL_PRECIO_auh5rv.mp4";
+  const mainVideoUrl = "https://raw.githubusercontent.com/clashivfx-creator/MEDIA/932792fe6f26966c0b137b025833b040c3af60f2/VIDEO_PRINCIAL_AL_LADO_DEL_PRECIO_auh5rv%20(1).mp4";
   const videoAspect = "aspect-[1366/766]";
 
   useEffect(() => {
@@ -59,19 +59,19 @@ export const UltraWorkflow: React.FC = () => {
                   window.dispatchEvent(new CustomEvent('openUpsellModal', { detail: { productId: shopifyProductId } }));
                 }
               },
-              "styles": { 
-                "button": { 
-                  "font-family": "Manrope, sans-serif", 
-                  "font-weight": "900", 
-                  "font-size": "15px", 
-                  "padding": "22px", 
-                  "border-radius": "20px", 
-                  "background-color": "#311161", 
-                  "color": "#ffffff", 
-                  "width": "100%", 
+              "styles": {
+                "button": {
+                  "font-family": "Manrope, sans-serif",
+                  "font-weight": "900",
+                  "font-size": "15px",
+                  "padding": "22px",
+                  "border-radius": "20px",
+                  "background-color": "#311161",
+                  "color": "#ffffff",
+                  "width": "100%",
                   ":hover": { "background-color": "#421a80" },
                   "box-shadow": "0 10px 20px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.1)"
-                } 
+                }
               },
               "contents": { "img": false, "title": false, "price": false },
               "text": { "button": lang === 'es' ? "OBTENER ACCESO INMEDIATO" : "GET INSTANT ACCESS" }
@@ -84,11 +84,11 @@ export const UltraWorkflow: React.FC = () => {
                 "footer": { "background-color": "#000000", "color": "#ffffff", "border-top": "1px solid rgba(255,255,255,0.1)" },
                 "button": { "background-color": "#22c55e", "color": "#ffffff", ":hover": { "background-color": "#16a34a" } },
                 "subtotal": { "color": "#ffffff" },
-                "notice": { 
-                  "color": "#22c55e", 
-                  "font-weight": "900", 
-                  "font-size": "14px", 
-                  "text-align": "center", 
+                "notice": {
+                  "color": "#22c55e",
+                  "font-weight": "900",
+                  "font-size": "14px",
+                  "text-align": "center",
                   "margin-bottom": "15px",
                   "text-shadow": "0 0 10px rgba(34, 197, 94, 0.8), 0 0 20px rgba(34, 197, 94, 0.4)"
                 },
@@ -103,7 +103,11 @@ export const UltraWorkflow: React.FC = () => {
             "lineItem": {
               "styles": {
                 "title": { "color": "#ffffff", "font-weight": "800" },
-                "discount": { "color": "#22c55e", "font-weight": "900", "text-shadow": "0 0 8px rgba(34, 197, 94, 0.5)" }
+                "discount": { "color": "#22c55e", "font-weight": "900", "text-shadow": "0 0 8px rgba(34, 197, 94, 0.5)" },
+                "quantity": { "color": "#ffffff", "font-weight": "900" },
+                "quantityIncrement": { "color": "#ffffff", "border-color": "#ffffff" },
+                "quantityDecrement": { "color": "#ffffff", "border-color": "#ffffff" },
+                "quantityInput": { "color": "#ffffff", "background": "transparent !important", "border-color": "#ffffff" }
               }
             }
           }
@@ -140,7 +144,7 @@ export const UltraWorkflow: React.FC = () => {
               <VideoContainer src={mainVideoUrl} className="w-full" aspect={videoAspect} />
             </FadeIn>
           </div>
-          
+
           <div className="lg:col-span-4 flex flex-col order-2">
             <FadeIn delay={300} className="h-full">
               <div className="relative bg-[#050408] border border-white/5 rounded-[2.5rem] p-8 sm:p-10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] flex flex-col overflow-hidden">
@@ -195,7 +199,7 @@ export const UltraWorkflow: React.FC = () => {
                 <div className="relative">
                   <div id={shopifyNodeId} className="w-full relative z-10"></div>
                   <div className="absolute right-6 top-1/2 -translate-y-1/2 pointer-events-none z-20">
-                     <Zap className="w-5 h-5 text-white/40" />
+                    <Zap className="w-5 h-5 text-white/40" />
                   </div>
                 </div>
 

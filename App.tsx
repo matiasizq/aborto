@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useState, createContext, useEffect } from 'react';
+import { useRouter, usePathname } from 'next/navigation';
+import { getProducts } from './config/products';
 import { CommercialStore } from './components/CommercialStore';
 import { BundleShowcase } from './components/BundleShowcase';
 import { AboutUs } from './components/AboutUs';
@@ -89,6 +91,9 @@ const translations = {
     'bundle.guarantee': 'PAGO ÚNICO • ACCESO DE POR VIDA • DESCARGA INSTANTÁNEA',
     'bundle.guarantee_title': 'Garantía total',
     'bundle.guarantee_desc': 'Si no te sirve te devolvemos el 100% de tu dinero',
+    'bundle.guarantee_days': 'GARANTÍA DE 7 DÍAS',
+    'bundle.guarantee_refund': 'Si no te sirve te devolvemos tu dinero',
+    'bundle.guarantee_update': 'ACTUALIZACIONES DE POR VIDA',
     'bundle.satisfaction': 'Garantía de satisfacción. Si no te sirve te devolvemos el 100% de tu dinero',
     'bundle.includes': 'CON ESTO VAS A PODER...',
     'bundle.this_pack': ' LLEVAR TUS VÍDEOS AL SIGUIENTE NIVEL',
@@ -204,6 +209,9 @@ const translations = {
     'bundle.guarantee': 'ONE-TIME PAYMENT • LIFETIME ACCESS • INSTANT DOWNLOAD',
     'bundle.guarantee_title': 'Total Guarantee',
     'bundle.guarantee_desc': "If it doesn't work for you, we'll refund 100% of your money",
+    'bundle.guarantee_days': '7-DAY GUARANTEE',
+    'bundle.guarantee_refund': "If it doesn't work for you we'll refund your money",
+    'bundle.guarantee_update': 'LIFETIME UPDATES',
     'bundle.satisfaction': "Satisfaction guarantee. If it doesn't work for you, we'll refund 100% of your money",
     'bundle.includes': 'WITH THIS YOU WILL BE ABLE TO...',
     'bundle.this_pack': ' TAKE YOUR VIDEOS TO THE NEXT LEVEL',
@@ -269,12 +277,76 @@ const translations = {
   }
 };
 
-const App = () => {
+const App = ({ initialTab, initialProductId }: { initialTab?: ActiveTab, initialProductId?: string }) => {
+  const router = useRouter();
+  const pathname = usePathname();
   const [lang, setLang] = useState<'es' | 'en'>('es');
-  const [activeTab, setActiveTab] = useState<ActiveTab>('products');
+  const [activeTab, setActiveTab] = useState<ActiveTab>(initialTab || 'products');
   const [selectedProduct, setSelectedProduct] = useState<any>(null);
   const [showUpsell, setShowUpsell] = useState(false);
   const [upsellExcludeId, setUpsellExcludeId] = useState<string | null>(null);
+
+  const t = (key: string) => {
+    return (translations[lang] as any)[key] || key;
+  };
+
+  // Map tabs to paths
+  const tabToPath: Record<ActiveTab, string> = {
+    'about': '/inicio',
+    'products': '/elite-pack',
+    'platinum': '/platinum-pack',
+    'store': '/tienda',
+    'checkout': '/checkout',
+    'ultra': '/ultraworkflow',
+    'detail': '/producto'
+  };
+
+  useEffect(() => {
+    // Sync state if URL changes externally (backward/forward buttons)
+    const segments = pathname.split('/');
+    const slug = segments[1];
+
+    if (slug === 'producto' && segments[2]) {
+      const prodId = segments[2];
+      if (selectedProduct?.id !== prodId) {
+        const allProducts = getProducts(t);
+        const foundProduct = allProducts.find(p => p.id === prodId);
+        if (foundProduct) {
+          setSelectedProduct(foundProduct);
+          if (activeTab !== 'detail') setActiveTab('detail');
+        }
+      }
+    } else if (slug) {
+      const pathToTabMapping: Record<string, ActiveTab> = {
+        'inicio': 'about',
+        'elite-pack': 'products',
+        'platinum-pack': 'platinum',
+        'tienda': 'store',
+        'checkout': 'checkout',
+        'ultraworkflow': 'ultra',
+      };
+      const mappedTab = pathToTabMapping[slug];
+      if (mappedTab && activeTab !== mappedTab) {
+        setActiveTab(mappedTab);
+      }
+    } else if (activeTab !== 'products') {
+      setActiveTab('products');
+    }
+  }, [pathname, activeTab, selectedProduct, t]);
+
+  useEffect(() => {
+    // Handle initial state if passed via props
+    if (initialTab === 'detail' && initialProductId) {
+      const allProducts = getProducts(t);
+      const foundProduct = allProducts.find(p => p.id === initialProductId);
+      if (foundProduct) {
+        setSelectedProduct(foundProduct);
+        setActiveTab('detail');
+      }
+    } else if (initialTab) {
+      setActiveTab(initialTab);
+    }
+  }, [initialTab, initialProductId]);
 
   useEffect(() => {
     window.goToStore = () => {
@@ -302,14 +374,19 @@ const App = () => {
     };
   }, []);
 
-  const t = (key: string) => {
-    return (translations[lang] as any)[key] || key;
-  };
-
   const handleSetTab = (tab: ActiveTab, product?: any) => {
     if (product) setSelectedProduct(product);
     setActiveTab(tab);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    // Update URL
+    let newPath = tabToPath[tab];
+    if (tab === 'detail' && product) {
+      newPath = `/producto/${product.id}`;
+    } else if (tab === 'products') {
+      newPath = '/'; // Keep elite pack at root
+    }
+
+    router.push(newPath || '/', { scroll: true });
   };
 
   const NavButtons = () => (
